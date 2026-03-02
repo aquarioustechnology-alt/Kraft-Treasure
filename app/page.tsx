@@ -12,11 +12,6 @@ export default function HomePage() {
       <Navigation />
       <HeroSection />
 
-      {/* Divider */}
-      <div className="flex items-center justify-center px-6 lg:px-20">
-        <div className="w-full border-t border-border" />
-      </div>
-
       <CollectionsSection />
 
       <FeaturedProducts />

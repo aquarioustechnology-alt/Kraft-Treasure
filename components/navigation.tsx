@@ -2,7 +2,8 @@
 
 import { useState, useSyncExternalStore, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, ShoppingBag } from "lucide-react"
+import NextImage from "next/image"
+import { Menu, X, ShoppingBag, Search, Heart, User } from "lucide-react"
 import { cartStore } from "@/lib/store"
 import { currencies } from "@/lib/data"
 
@@ -23,85 +24,90 @@ export function Navigation() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-background/95 backdrop-blur-md border-b border-border"
-            : "bg-transparent"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+          ? "bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm"
+          : "bg-transparent"
+          }`}
       >
-        <nav className="flex items-center justify-between px-6 py-4 lg:px-12">
-          {/* Hamburger Menu */}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
-            aria-label="Open menu"
-          >
-            <Menu className="w-5 h-5" />
-            <span className="text-xs tracking-[0.2em] uppercase font-sans hidden sm:inline">
-              Menu
-            </span>
-          </button>
+        <div className="max-w-[1440px] mx-auto w-full">
+          <nav className="flex items-center justify-between px-6 py-5 lg:px-12 lg:py-6">
+            {/* Left side - Logo & Desktop Nav */}
+            <div className="flex items-center gap-12">
+              <Link href="/" className="transition-opacity hover:opacity-80">
+                <NextImage
+                  src="/images/logo/Logo Transparent.png"
+                  alt="Kraft Treasure Logo"
+                  width={140}
+                  height={55}
+                  className="object-contain h-10 lg:h-12 w-auto"
+                  priority
+                />
+              </Link>
 
-          {/* Logo */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-            <div className="text-center">
-              <p className="text-[10px] tracking-[0.4em] uppercase text-primary font-sans">
-                Arunachal
-              </p>
-              <h1 className="text-lg lg:text-xl font-serif tracking-[0.15em] text-foreground">
-                LUXE ARTIFACTS
-              </h1>
+              {/* Desktop Nav Links */}
+              <div className="hidden lg:flex items-center gap-8">
+                {["Home", "Shop", "Our Story", "Contact"].map((item) => (
+                  <Link
+                    key={item}
+                    href={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`}
+                    className="text-[11px] tracking-[0.2em] uppercase font-sans font-medium text-black hover:text-[#E31E25] transition-colors"
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </Link>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-4 lg:gap-6">
-            {/* Currency Selector */}
-            <select
-              value={cart.currency}
-              onChange={(e) => cartStore.setCurrency(e.target.value)}
-              className="bg-transparent text-xs tracking-[0.15em] uppercase text-foreground border-none outline-none cursor-pointer font-sans hidden sm:block"
-              aria-label="Select currency"
-            >
-              {currencies.map((c) => (
-                <option key={c.code} value={c.code} className="bg-background text-foreground">
-                  {c.code}
-                </option>
-              ))}
-            </select>
+            {/* Right actions */}
+            <div className="flex items-center gap-4 lg:gap-6">
+              {/* Search */}
+              <button className="text-black hover:text-[#E31E25] transition-colors" aria-label="Search">
+                <Search className="w-5 h-5 lg:w-6 lg:h-6" />
+              </button>
 
-            {/* Cart */}
-            <Link
-              href="/checkout"
-              className="relative text-foreground hover:text-primary transition-colors"
-              aria-label={`Shopping bag with ${itemCount} items`}
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {itemCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-primary text-primary-foreground text-[9px] font-sans flex items-center justify-center rounded-full">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
+              {/* Login */}
+              <Link href="/login" className="text-black hover:text-[#E31E25] transition-colors" aria-label="Login">
+                <User className="w-5 h-5 lg:w-6 lg:h-6" />
+              </Link>
 
-            {/* Bespoke CTA */}
-            <Link
-              href="#bespoke"
-              className="hidden lg:flex items-center gap-2 px-5 py-2 border border-primary text-primary text-xs tracking-[0.2em] uppercase font-sans hover:bg-primary hover:text-primary-foreground transition-all duration-300"
-            >
-              Bespoke Orders
-            </Link>
-          </div>
-        </nav>
+              {/* Wishlist */}
+              <button className="text-black hover:text-[#E31E25] transition-colors" aria-label="Wishlist">
+                <Heart className="w-5 h-5 lg:w-6 lg:h-6" />
+              </button>
+
+              {/* Cart */}
+              <Link
+                href="/checkout"
+                className="relative text-black hover:text-[#E31E25] transition-colors"
+                aria-label={`Shopping bag with ${itemCount} items`}
+              >
+                <ShoppingBag className="w-5 h-5 lg:w-6 lg:h-6" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 w-4 h-4 lg:w-5 lg:h-5 bg-[#E31E25] text-white text-[9px] lg:text-[10px] font-sans flex items-center justify-center rounded-full font-bold">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Mobile Menu */}
+              <button
+                onClick={() => setMenuOpen(true)}
+                className="lg:hidden text-black hover:text-[#E31E25] transition-colors"
+                aria-label="Open menu"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+            </div>
+          </nav>
+        </div>
       </header>
 
       {/* Full-screen overlay menu */}
       <div
-        className={`fixed inset-0 z-[60] transition-all duration-700 ${
-          menuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-[60] transition-all duration-700 ${menuOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+          }`}
       >
         {/* Background */}
         <div
@@ -110,9 +116,8 @@ export function Navigation() {
         />
 
         {/* Menu Content */}
-        <div className={`relative h-full flex flex-col justify-center px-8 lg:px-20 transition-transform duration-700 ${
-          menuOpen ? "translate-y-0" : "-translate-y-8"
-        }`}>
+        <div className={`relative h-full flex flex-col justify-center px-8 lg:px-20 transition-transform duration-700 ${menuOpen ? "translate-y-0" : "-translate-y-8"
+          }`}>
           {/* Close button */}
           <button
             onClick={() => setMenuOpen(false)}
@@ -132,7 +137,6 @@ export function Navigation() {
               { label: "Collections", href: "/#collections" },
               { label: "Heritage", href: "/#heritage" },
               { label: "Artisans", href: "/#artisans" },
-              { label: "Bespoke Orders", href: "#bespoke" },
               { label: "Checkout", href: "/checkout" },
             ].map((item, index) => (
               <Link
